@@ -1,5 +1,6 @@
 const fs = require('fs');
 const pt = require('path');
+const csv = require('csv-parser');
 var readline = require('readline');
 
 //joining path of directory 
@@ -12,7 +13,7 @@ var csvFiles = []
 fs.readdir(downloads, function (err, files) {
     //handling error
     if (err) {
-        return console.log('ERR: Unable to scan directory. --' + err);
+        return console.log('ERR: Unable to scan directory --' + err);
     } 
     // listing all files using forEach
     files.forEach(file => {
@@ -42,6 +43,7 @@ fs.readdir(downloads, function (err, files) {
                 } else {
                     // Do stuff
                     console.log(csvFiles[choice], "was chosen.")
+                    
                 }
             } else {
                 console.log("ERR: You did not enter a valid number for the index!  ")

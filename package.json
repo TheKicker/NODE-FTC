@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/TheKicker/NODE-FTC/issues"
   },
-  "homepage": "https://github.com/TheKicker/NODE-FTC#readme"
+  "homepage": "https://github.com/TheKicker/NODE-FTC#readme",
+  "dependencies": {
+    "csv-parser": "^3.0.0"
+  }
 }
