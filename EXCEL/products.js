@@ -61,8 +61,7 @@ function myFunction(path){
         .on('data', (data)=>{ results.push(data)})
         .on('end', ()=>{
             // Do stuff
-            results.forEach(element => {
-                console.log(element.Vendor)
-            });
+            const uniqueProp = [...new Set( results.map(res => res.Vendor)) ];
+            console.log(uniqueProp)
         })
 }
