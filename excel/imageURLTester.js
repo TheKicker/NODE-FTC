@@ -70,22 +70,26 @@ function uniqueValues(path){
             // for each item in the CSV
             results.forEach((item) => {
                 // Make an HTTP request to the variant image tester
-                var request = ht.get(item.IMG, function (response) {
+                var request = ht.get(item.URL, function (response) {
                     // console.log(response.statusCode);
+                    // If the status is 404, increment, and log
                     if (response.statusCode === 404){
                         error404++
                         console.log(`200: ${error200} / 404: ${error404} / UNK: ${errorUnk}`)
+                    // If the status is 200, increment, and log
                     } else if (response.statusCode === 200){
                         error200++
                         console.log(`200: ${error200} / 404: ${error404} / UNK: ${errorUnk}`)
+                    // If the status is anything else, and log
                     } else {
-                        errorUnk++
-                        console.log(`200: ${error200} / 404: ${error404} / UNK: ${errorUnk}`)
+                        console.log(response.statusCode)
                     }
                 });
 
+                // On an error, let us know where it happened
                 request.on("error", function (error) {
-                    console.error(error.status);
+                    errorUnk++
+                    console.error(error, item);
                 });
             });
 
