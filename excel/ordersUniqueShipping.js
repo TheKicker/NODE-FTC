@@ -40,9 +40,9 @@ fs.readdir(downloads, function (err, files) {
                 if( choice > filesArray.length || choice < 0){
                     console.log("ERR: You entered a value outside of the index of files in the array. ")
                 } else {
-                    // Customize myFunction below to do stuff
+                    // Customize function below to do stuff
                     const filePath = require('path').join(require('os').homedir(), 'Downloads', filesArray[choice]) 
-                    myFunction(filePath)
+                    uniqueValues(filePath)
                 }
             } else {
                 console.log("ERR: You did not enter a valid number for the index!  ")
@@ -52,7 +52,9 @@ fs.readdir(downloads, function (err, files) {
     }
 });
 
-function myFunction(path){
+
+
+function uniqueValues(path){
     console.log(path)
     const results = []
 
@@ -61,7 +63,13 @@ function myFunction(path){
         .on('data', (data)=>{ results.push(data)})
         .on('end', ()=>{
             // Do stuff
-            const uniqueProp = [...new Set( results.map(res => res.Vendor)) ];
-            console.log(uniqueProp)
+            let votes = {};   
+            results.forEach((item) => votes[item.ShippingMethod] = (votes[item.ShippingMethod] || 0) + 1);
+            console.log(votes);
+
+            // let arr = Object.keys(votes).reduce((prev, cur) => [ ...prev, { [cur]: votes[cur] } ], []);
+            // console.log(arr)
+
+            // const uniqueProp = [...new Set( results.map(res => res.Name)) ]; // ouputs all the unique values in Name column
         })
 }

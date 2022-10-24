@@ -1,5 +1,6 @@
 const fs = require('fs');
 const pt = require('path');
+const ht = require('https');
 var readline = require('readline');
 
 //joining path of directory 
@@ -57,19 +58,38 @@ fs.readdir(downloads, function (err, files) {
 function uniqueValues(path){
     console.log(path)
     const results = []
+    var error404 = 0
+    var error200 = 0
+    var errorUnk = 0
 
     fs.createReadStream(path)
         .pipe(csv({}))
         .on('data', (data)=>{ results.push(data)})
-        .on('end', ()=>{
-            // Do stuff
-            let votes = {};   
-            results.forEach((item) => votes[item.Name] = (votes[item.Name] || 0) + 1);
-            console.log(votes);
+        .on('end', ()=>{  
 
-            // let arr = Object.keys(votes).reduce((prev, cur) => [ ...prev, { [cur]: votes[cur] } ], []);
-            // console.log(arr)
+            // for each item in the CSV
+            results.forEach((item) => {
+                // Make an HTTP request to the variant image tester
+                var request = ht.get(item.IMG, function (response) {
+                    // console.log(response.statusCode);
+                    if (response.statusCode === 404){
+                        error404++
+                        console.log(`200: ${error200} / 404: ${error404} / UNK: ${errorUnk}`)
+                    } else if (response.statusCode === 200){
+                        error200++
+                        console.log(`200: ${error200} / 404: ${error404} / UNK: ${errorUnk}`)
+                    } else {
+                        errorUnk++
+                        console.log(`200: ${error200} / 404: ${error404} / UNK: ${errorUnk}`)
+                    }
+                });
 
-            // const uniqueProp = [...new Set( results.map(res => res.Name)) ]; // ouputs all the unique values in Name column
+                request.on("error", function (error) {
+                    console.error(error.status);
+                });
+            });
+
         })
+
+
 }
