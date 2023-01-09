@@ -11,6 +11,7 @@ const downloads = require('path').join(require('os').homedir(), 'Downloads')
 const csv = require('csv-parser');
 var fileExt = ".csv"
 var filesArray = []
+var nullFiles = []
 // passing directoryPath and callback function
 fs.readdir(downloads, function (err, files) {
     //handling error
@@ -24,11 +25,14 @@ fs.readdir(downloads, function (err, files) {
             // console.log(pt.basename(file), " is a file")
             filesArray.push(pt.basename(file))
         } else {
-            console.log(pt.basename(file), " is not a", fileExt)
+            nullFiles.push(pt.basename(file))
         }
     });
 
     // Log the options
+    console.log(`FAILED ----------------`)
+    console.log(`A total of ${nullFiles.length} were not ${fileExt}`)
+    console.log(`PASSED ----------------`)
     console.log(filesArray)
 
     if(filesArray.length === 0){
